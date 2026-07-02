@@ -71,9 +71,10 @@ report_<topic-slug>.md
 ├── requirements.txt
 ├── Dockerfile
 ├── .env.example
-├── reports/
-│   ├── report_topic1.md
-│   └── report_topic2.md
+├── report_topic1.md
+├── report_topic2.md
+├── report_topic3.md
+├── report_topic4.md
 └── README.md
 ```
 
@@ -236,12 +237,5 @@ Each run produces `reports/report_<topic-slug>.md`:
 ```json
 { "queries": [...], "num_sources": 5, "focus": "...", "keywords": [...] }
 ```
-```
 
----
 
-## 10. Design Choices
-
-- **Orchestration:** plain Python (no LangChain/CrewAI) — chosen for transparency and easier debugging within the assignment's scope, per the "recommended for simplicity" hint in the spec.
-- **Summarization strategy:** the report body is generated via three separate LLM calls (intro, body, conclusion) rather than one large call, to reliably hit the length/structure requirements without relying on the model to self-regulate paragraph counts in a single pass.
-- **Crawling:** async Playwright wrapped in a sync-safe `crawl_urls()` entry point, so it works whether or not an event loop is already running (relevant on Kaggle, which runs notebooks inside an existing loop).
