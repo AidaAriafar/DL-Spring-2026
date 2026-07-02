@@ -1,0 +1,7 @@
+# Python 3.10+ is required
+duckduckgo-search==5.3.1
+playwright==1.44.0
+beautifulsoup4==4.12.3
+readability-lxml==0.8.1
+litellm==1.40.0
+pytest==8.2.0
