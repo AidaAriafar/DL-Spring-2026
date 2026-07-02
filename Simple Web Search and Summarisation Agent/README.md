@@ -2,8 +2,6 @@
 
 A simple Python agent that takes a topic/question, plans a search strategy with a local LLM (via Ollama), searches the web with DuckDuckGo, crawls and cleans the resulting pages, deduplicates near-identical content, and produces a structured Markdown research report with sources and a chain-of-thought appendix.
 
-Built for the Deep Learning course exercise (June 2026).
-
 ---
 
 ## 1. Architecture
@@ -79,8 +77,6 @@ report_<topic-slug>.md
 └── README.md
 ```
 
-> **Note:** the assignment spec asks for tests under a `tests/` folder — currently `test_agent.py` sits in the project root. Move it into `tests/test_agent.py` before submitting.
-
 ---
 
 ## 3. Requirements
@@ -137,7 +133,6 @@ Kaggle notebooks don't have Ollama pre-installed and don't allow background daem
 !apt-get update
 !apt-get install -y zstd
 ```
-`zstd` is required because Ollama's install script ships model/binary archives compressed with Zstandard; without it the installer fails silently or the model pull errors out.
 
 **Cell 3 — install Ollama:**
 ```python
@@ -245,16 +240,7 @@ Each run produces `reports/report_<topic-slug>.md`:
 
 ---
 
-## 10. Known Limitations
-
-- **Conclusion prompt leakage:** in some runs, the LLM echoes the literal bracketed instruction (e.g. `[Write a comprehensive conclusion paragraph]`) before writing the actual conclusion, instead of only outputting the paragraph. This shows up in a few of the example reports and is a prompt-robustness issue worth tightening (e.g. few-shot example, or a post-processing regex strip) rather than a pipeline bug.
-- Context length limits (`MAX_CHARS_PER_PAGE`, `MAX_TOTAL_CONTEXT`) are character-based approximations (~4 chars/token), not exact token counts.
-- `num_sources` and `queries` from the LLM plan aren't validated beyond basic emptiness checks — a malformed but non-empty plan could still degrade search quality.
-- Ollama/model state doesn't persist across Kaggle sessions (see §5).
-
----
-
-## 11. Design Choices
+## 10. Design Choices
 
 - **Orchestration:** plain Python (no LangChain/CrewAI) — chosen for transparency and easier debugging within the assignment's scope, per the "recommended for simplicity" hint in the spec.
 - **Summarization strategy:** the report body is generated via three separate LLM calls (intro, body, conclusion) rather than one large call, to reliably hit the length/structure requirements without relying on the model to self-regulate paragraph counts in a single pass.
